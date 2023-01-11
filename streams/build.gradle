@@ -1,5 +1,10 @@
 plugins {
     id 'java'
+    id 'com.github.davidmc24.gradle.plugin.avro' version '1.0.0'
+}
+
+ext {
+    avroVerion = '1.10.0'
 }
 
 group 'org.example'
@@ -7,6 +12,8 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven {url "https://packages.confluent.io/maven/"}
+    maven {url "https://jitpack.io"}
 }
 
 dependencies {
@@ -18,7 +25,18 @@ dependencies {
     implementation 'org.slf4j:slf4j-simple:1.7.36'
     // https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams
     implementation 'org.apache.kafka:kafka-streams:3.3.0'
+    implementation 'org.apache.avro:avro:1.10.1'
+    implementation 'io.confluent:kafka-avro-serializer:5.5.1'
 }
+
+//def generateAvro = tasks.register("generateAvro", GenerateAvroJavaTask) {
+//    source("src/main/avro")
+//    outputDir = file("src/main/java")
+//}
+//
+//tasks.named("compileJava").configure {
+//    source(generateAvro)
+//}
 
 test {
     useJUnitPlatform()

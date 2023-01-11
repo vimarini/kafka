@@ -1,12 +1,14 @@
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
+import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.*;
 
 import java.util.Arrays;
 import java.util.Properties;
+import java.util.UUID;
 import java.util.stream.Stream;
 
 import static java.lang.ProcessBuilder.Redirect.to;
@@ -23,13 +25,11 @@ public class WordCount {
         StreamsBuilder builder = new StreamsBuilder();
 
         KStream<String, String> wordCountInput = builder.stream("streams-file-input");
-        KTable<String, Long> wordCounts = wordCountInput
-                .mapValues(value -> value.toLowerCase())
-                        .flatMapValues(value -> Arrays.asList(value.split(" ")))
-                                .selectKey((key, value) -> value)
-                                        .groupByKey()
-                                                .count();
-        wordCounts.toStream().to( "streams-wordcount-output");
+        KTable<String, String> wordCounts = wordCountInput
+                .map((key, value) -> new KeyValue<>(UUID.randomUUID().toString(), value + "_outer"))
+                .peek((value, a) -> System.out.println(value + " " + a)).toTable();
+
+        wordCounts.toStream().to( "streams-wordcount-output", Produced.with(Serdes.String(), Serdes.String()));
         wordCounts.toStream().print(Printed.toSysOut());
         KafkaStreams streams = new KafkaStreams(builder.build(), properties);
         streams.start();

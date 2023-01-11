@@ -1,0 +1,10 @@
+{
+  "type" : "record",
+  "namespace" : "com.example",
+  "name" : "Order",
+  "doc" : "Orders",
+  "fields" : [
+    {"name":"id","type": "int"},
+    {"name":"info","type":"string"}
+  ]
+}
