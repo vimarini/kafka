@@ -9,7 +9,6 @@ import org.apache.kafka.streams.kstream.*;
 import java.util.Arrays;
 import java.util.Properties;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static java.lang.ProcessBuilder.Redirect.to;
 

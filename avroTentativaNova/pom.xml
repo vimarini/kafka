@@ -30,6 +30,12 @@
             <artifactId>avro</artifactId>
             <version>${avro.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-streams -->
+        <dependency>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka-streams</artifactId>
+            <version>3.3.0</version>
+        </dependency>
 
         <!--dependencies needed for the kafka part-->
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->

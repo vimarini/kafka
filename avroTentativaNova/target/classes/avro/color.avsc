@@ -1,0 +1,10 @@
+{
+  "type" : "record",
+  "namespace" : "com.example",
+  "name" : "Colors",
+  "doc" : "Colors",
+  "fields" : [
+    {"name":"name","type": "string"},
+    {"name":"color","type":"string"}
+  ]
+}

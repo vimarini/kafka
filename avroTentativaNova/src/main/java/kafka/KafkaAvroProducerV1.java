@@ -36,7 +36,6 @@ public class KafkaAvroProducerV1 {
         kafkaProducer.send(record, new Callback() {
             @Override
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                System.out.println("Entrei");
                 if (e == null) {
                     System.out.println("Success");
                     System.out.println(recordMetadata.toString());

@@ -1,5 +1,12 @@
 org/example/Main.class
 com/example/Order$Builder.class
-com/example/Order.class
-com/github/avro/generic/GenericRecordExamples.class
+avroStream/favoriteColor.class
+com/example/Colors.class
+com/example/Colors$1.class
 com/example/Order$1.class
+com/example/Order.class
+com/example/colors$1.class
+com/example/colors.class
+com/example/Colors$Builder.class
+com/github/avro/generic/GenericRecordExamples.class
+com/example/colors$Builder.class
