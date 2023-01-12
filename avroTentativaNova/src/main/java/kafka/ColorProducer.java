@@ -26,8 +26,8 @@ public class ColorProducer {
 
         KafkaProducer<String, Colors> kafkaProducer = new KafkaProducer<String, Colors>(properties);
         Colors color = Colors.newBuilder()
-                .setColor("Black")
-                .setName("Washington")
+                .setColor("red")
+                .setName("Erivaldo")
                 .build();
         ProducerRecord<String, Colors> record = new ProducerRecord<String, Colors>("color-avro", color);
         kafkaProducer.send(record, new Callback() {

@@ -9,7 +9,9 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Printed;
+import org.apache.kafka.streams.kstream.Produced;
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -32,11 +34,13 @@ public class FavoriteColor {
         properties.setProperty("value.deserializer", KafkaAvroDeserializer.class.getName());
         properties.setProperty("schema.registry.url", "http://127.0.0.1:8081");
         properties.setProperty("specific.avro.reader", "true");
+
         StreamsBuilder builder = new StreamsBuilder();
 
         KStream<String, Colors> colors = builder.stream("color-avro");
-        KStream<String, Colors> filtered = colors.filter((name,color) -> Arrays.asList("Red,Blue").contains(color));
-        filtered.print(Printed.toSysOut());
+        colors.print(Printed.toSysOut());
+        KTable<String, Colors> removeDuplicate = colors.toTable();
+        removeDuplicate.toStream().to("color-avro2", Produced.with(Serdes.String(), Colors.getEncoder()));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), properties);
         streams.start();

@@ -27,7 +27,7 @@ public class ColorConsumer {
         properties.setProperty("specific.avro.reader", "true");
 
         KafkaConsumer<String, Colors> consumer = new KafkaConsumer<String, Colors>(properties);
-        String topic = "color-avro";
+        String topic = "color-avro2";
         consumer.subscribe(Collections.singleton(topic));
         System.out.println("Waiting for data...");
 
