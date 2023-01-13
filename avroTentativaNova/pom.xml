@@ -15,6 +15,7 @@
         <avro.version>1.11.1</avro.version>
         <kafka.version>3.3.0</kafka.version>
         <confluent.version>7.2.2</confluent.version>
+        <slf4j.version>1.6.1</slf4j.version>
     </properties>
 
     <repositories>
@@ -25,6 +26,17 @@
     </repositories>
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.apache.avro</groupId>
             <artifactId>avro</artifactId>

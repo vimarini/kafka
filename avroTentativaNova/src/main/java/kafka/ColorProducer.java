@@ -1,6 +1,6 @@
 package kafka;
 
-import com.example.Colors;
+import com.example.Color;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
 import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
@@ -24,12 +24,12 @@ public class ColorProducer {
         properties.setProperty("specific.avro.reader", "true");
 
 
-        KafkaProducer<String, Colors> kafkaProducer = new KafkaProducer<String, Colors>(properties);
-        Colors color = Colors.newBuilder()
+        KafkaProducer<String, Color> kafkaProducer = new KafkaProducer<String, Color>(properties);
+        Color color = Color.newBuilder()
                 .setColor("red")
-                .setName("Erivaldo")
+                .setName("Roger")
                 .build();
-        ProducerRecord<String, Colors> record = new ProducerRecord<String, Colors>("color-avro", color);
+        ProducerRecord<String, Color> record = new ProducerRecord<String, Color>("color-avro", color);
         kafkaProducer.send(record, new Callback() {
             @Override
             public void onCompletion(RecordMetadata recordMetadata, Exception e) {

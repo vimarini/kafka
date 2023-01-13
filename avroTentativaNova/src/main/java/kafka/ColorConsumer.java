@@ -1,7 +1,6 @@
 package kafka;
 
-import com.example.Colors;
-import com.example.Order;
+import com.example.Color;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
@@ -26,16 +25,16 @@ public class ColorConsumer {
         properties.setProperty("schema.registry.url", "http://127.0.0.1:8081");
         properties.setProperty("specific.avro.reader", "true");
 
-        KafkaConsumer<String, Colors> consumer = new KafkaConsumer<String, Colors>(properties);
-        String topic = "color-avro2";
+        KafkaConsumer<String, Color> consumer = new KafkaConsumer<String, Color>(properties);
+        String topic = "color-avro";
         consumer.subscribe(Collections.singleton(topic));
-        System.out.println("Waiting for data...");
+        System.out.println("Waiting for data in "+topic+" ...");
 
         while(true) {
-            ConsumerRecords<String, Colors> records = consumer.poll(500);
-            for (ConsumerRecord<String, Colors> record : records) {
-                Colors colors = record.value();
-                System.out.println(colors);
+            ConsumerRecords<String, Color> records = consumer.poll(500);
+            for (ConsumerRecord<String, Color> record : records) {
+                Color color = record.value();
+                System.out.println(color);
             }
         }
     }

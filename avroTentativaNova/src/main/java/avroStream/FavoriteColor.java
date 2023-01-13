@@ -1,6 +1,5 @@
 package avroStream;
 
-import com.example.Colors;
 import io.confluent.kafka.serializers.KafkaAvroDeserializer;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serdes;
@@ -11,9 +10,8 @@ import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Printed;
-import org.apache.kafka.streams.kstream.Produced;
 
-import java.util.Arrays;
+import java.awt.*;
 import java.util.Properties;
 
 public class FavoriteColor {
@@ -28,7 +26,7 @@ public class FavoriteColor {
         properties.put(StreamsConfig.APPLICATION_ID_CONFIG, "word-count");
         properties.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
         properties.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
-        properties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
+        properties.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, KafkaAvroDeserializer.class.getName());
         // avro part (deserializer)
         properties.setProperty("key.deserializer", StringDeserializer.class.getName());
         properties.setProperty("value.deserializer", KafkaAvroDeserializer.class.getName());
@@ -37,10 +35,10 @@ public class FavoriteColor {
 
         StreamsBuilder builder = new StreamsBuilder();
 
-        KStream<String, Colors> colors = builder.stream("color-avro");
+        KStream<String, Color> colors = builder.stream("color-avro");
         colors.print(Printed.toSysOut());
-        KTable<String, Colors> removeDuplicate = colors.toTable();
-        removeDuplicate.toStream().to("color-avro2", Produced.with(Serdes.String(), Colors.getEncoder()));
+        KTable<String, Color> removeDuplicate = colors.toTable();
+//        removeDuplicate.toStream().to("color-avro2", Produced.with(Serdes.String(),));
 
         KafkaStreams streams = new KafkaStreams(builder.build(), properties);
         streams.start();
