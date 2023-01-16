@@ -41,23 +41,28 @@ public class DesafioStreamsV2 {
         KStream<String, String> removeDados = numerosInput.filter((key, value) -> isNumeric(value));
 
         KStream<String, String>[] branch = removeDados.branch(
-                (key, value) -> Integer.parseInt(value) < 1,
-                (key, value) -> Integer.parseInt(value) > 1,
-                (key, value) -> Integer.parseInt(value) == 1
+                (key, value) -> true,
+                (key, value) -> true,
+                (key, value) -> true
         );
 
-        Map<String, KStream<String, String>> branchesMap = removeDados.split(Named.as("Branch-"))
-                .branch((key, value) -> Integer.parseInt(value) > 0,  /* first predicate  */
-                        Branched.as("A"))
-                .branch((key, value) -> Integer.parseInt(value) >0,  /* second predicate */
-                        Branched.as("B"))
-                .branch((key, value) -> Integer.parseInt(value) >0,  /* second predicate */
-                Branched.as("C"))
-                .noDefaultBranch();
+        branch[0].peek((a,b)-> System.out.println("branchA - value = "+ b));
+        branch[1].peek((a,b)-> System.out.println("branchB - value = "+ b));
+        branch[2].peek((a,b)-> System.out.println("branchC - value = "+ b));
 
-        branchesMap.get("Branch-A").peek((a,b)-> System.out.println("branchA - value = "+ b)).mapValues((key,value)->String.valueOf(Integer.parseInt(value)+1)).to(topic1, Produced.with(Serdes.String(),Serdes.String()));
-        branchesMap.get("Branch-B").peek((a,b)-> System.out.println("branchB - value = "+ b)).mapValues((key,value)->String.valueOf(Integer.parseInt(value)+1)).to(topic2, Produced.with(Serdes.String(),Serdes.String()));
-        branchesMap.get("Branch-C").peek((a,b)-> System.out.println("branchC - value = "+ b)).mapValues((key,value)->String.valueOf(Integer.parseInt(value)+1)).to(topic3, Produced.with(Serdes.String(),Serdes.String()));
+
+//        Map<String, KStream<String, String>> branchesMap = removeDados.split(Named.as("Branch-"))
+//                .branch((key, value) -> Integer.parseInt(value) > 0,  /* first predicate  */
+//                        Branched.as("A"))
+//                .branch((key, value) -> Integer.parseInt(value) >0,  /* second predicate */
+//                        Branched.as("B"))
+//                .branch((key, value) -> Integer.parseInt(value) >0,  /* second predicate */
+//                Branched.as("C"))
+//                .noDefaultBranch();
+//
+//        branchesMap.get("Branch-A").peek((a,b)-> System.out.println("branchA - value = "+ b)).mapValues((key,value)->String.valueOf(Integer.parseInt(value)+1)).to(topic1, Produced.with(Serdes.String(),Serdes.String()));
+//        branchesMap.get("Branch-B").peek((a,b)-> System.out.println("branchB - value = "+ b)).mapValues((key,value)->String.valueOf(Integer.parseInt(value)+1)).to(topic2, Produced.with(Serdes.String(),Serdes.String()));
+//        branchesMap.get("Branch-C").peek((a,b)-> System.out.println("branchC - value = "+ b)).mapValues((key,value)->String.valueOf(Integer.parseInt(value)+1)).to(topic3, Produced.with(Serdes.String(),Serdes.String()));
 
 //        List<String> dados = new ArrayList<>();
 //        streamSomada.foreach(
