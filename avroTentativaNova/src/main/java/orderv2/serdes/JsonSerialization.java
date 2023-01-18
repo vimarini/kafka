@@ -1,0 +1,2 @@
+package orderv2.serdes;public class JsonSerialization {
+}
