@@ -7,6 +7,8 @@ import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
+import org.apache.kafka.streams.Topology;
+import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.KStream;
 
 import java.util.Properties;
@@ -35,18 +37,13 @@ public class DesafioStreamsV3 {
 
 
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-        KStream<String, String> numerosInput = streamsBuilder.stream(topic);
-        KStream<String, String> removeDados = numerosInput.filter((key, value) -> isNumeric(value));
-
+        KStream<String, String> numerosInput = streamsBuilder.stream(topic, Consumed.with(Serdes.String(),Serdes.String()).withName("somaProcessor").withOffsetResetPolicy(Topology.AutoOffsetReset.LATEST)).filter((key,value)->isNumeric(value));
         SomaProcessor somaProcessorPlusOne = new SomaProcessor("1",topic1);
         SomaProcessor somaProcessorPlusTwo = new SomaProcessor("2",topic2);
-//        SomaProcessor somaProcessorPlusThree = new SomaProcessor("3",topic3);
-        somaProcessorPlusOne.process(removeDados);
-        somaProcessorPlusTwo.process(removeDados);
-//        somaProcessorPlusThree.process(removeDados);
-
+        somaProcessorPlusOne.process(numerosInput);
+        somaProcessorPlusTwo.process(numerosInput);
         StringSomaProcessor stringSomaProcessor = new StringSomaProcessor("3",topic3);
-        stringSomaProcessor.process(removeDados);
+        stringSomaProcessor.process(numerosInput);
 
 
         KafkaStreams streams = new KafkaStreams(streamsBuilder.build(), properties);

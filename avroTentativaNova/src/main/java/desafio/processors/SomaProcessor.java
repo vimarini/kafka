@@ -2,6 +2,7 @@ package desafio.processors;
 
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.kstream.KStream;
+import org.apache.kafka.streams.kstream.Printed;
 import org.apache.kafka.streams.kstream.Produced;
 
 import java.text.NumberFormat;
@@ -28,10 +29,11 @@ public class SomaProcessor implements StreamProcessor {
     public void process(KStream<String, String> stream) {
         stream.mapValues((key,value)-> {
             try {
+
                 return String.valueOf(NumberFormat.getInstance().parse(value).floatValue() + NumberFormat.getInstance().parse(this.getParcela()).floatValue());
             } catch (ParseException e) {
                 throw new RuntimeException(e);
             }
-        }).to(this.getTopic(), Produced.with(Serdes.String(),Serdes.String()));
+        }).peek((k,v)-> System.out.println("PR"+this.parcela+" -> "+v)).to(this.getTopic(), Produced.with(Serdes.String(),Serdes.String()));
     }
 }

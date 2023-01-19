@@ -23,6 +23,6 @@ public class StringSomaProcessor implements StreamProcessor {
 
     @Override
     public void process(KStream<String, String> stream) {
-        stream.mapValues((key,value)-> value + this.getParcela()).to(this.getTopic(), Produced.with(Serdes.String(),Serdes.String()));
+        stream.mapValues((key,value)-> value + this.getParcela()).peek((k,v)-> System.out.println("PRS"+this.parcela+" -> "+v)).to(this.getTopic(), Produced.with(Serdes.String(),Serdes.String()));
     }
 }
