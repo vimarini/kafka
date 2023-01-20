@@ -12,8 +12,9 @@ import java.util.Properties;
 public class helloProcessor {
     public static void main(String[] args) {
         Topology topology = new Topology();
-        topology.addSource("Desafio","desafio-input");
-        topology.addProcessor("Basic", ProcessorBasic::new, "Desafio");
+        topology.addSource("processor-hello","hello-input");
+        topology.addProcessor("Basic", ProcessorBasic::new, "processor-hello");
+        topology.addSink("processor-sink","hello-output","processor-hello");
 
         Properties config = new Properties();
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "dev2");
